@@ -3,22 +3,31 @@ const Bisquits = require('bisquits');
 
 class Wishlister {
   constructor(opts) {
-    this.opts = opts;
-    this.cookieHandler = new Bisquits('posts', 'post');
+    if (!opts.hasOwnProperty('list')) throw new Error('List is needed.');
+    if (!opts.hasOwnProperty('item')) throw new Error('Item is needed.');
+    if (!opts.hasOwnProperty('action')) throw new Error('Action is needed.');
+    this.$list = $(opts.list);
+    this.$item = $(opts.item);
+    this.$action = $(opts.action);
+    this.$flusher = $(opts.flusher) || null;
+    this.$counter = $(opts.counter) || null;
+    this.cookieHandler = new Bisquits('wishlist', 'item');
   }
 
   initiate() {
-    this.count = parseInt(this.opts.$counter.text());
+    this.count = parseInt(this.$counter.text());
 
-    this.opts.$action.on('click', (e) => {
+    this.$action.on('click', (e) => {
       this.addOrRemove($(e.target));
       return false;
     });
 
-    this.opts.$flusher.on('click', () => {
-      this.flush();
-      return false;
-    });
+    if (this.$flusher) {
+      this.$flusher.on('click', () => {
+        this.flush();
+        return false;
+      });
+    }
   }
 
   addOrRemove($elem) {
@@ -32,7 +41,7 @@ class Wishlister {
       this.remove($elem, postId);
     }
 
-    this.opts.$counter.html(this.count);
+    this.$counter.html(this.count);
     return add;
   }
 
@@ -45,11 +54,7 @@ class Wishlister {
   remove($elem, postId) {
     this.cookieHandler.remove(postId);
     $elem.html($elem.attr('data-add-label'));
-
-    if (window.location.pathname.indexOf(this.opts.wishlistPath) > -1) {
-      $elem.parent('li').remove();
-    }
-
+    this.$list.find(this.$item).remove();
     return this.count--;
   }
 
@@ -70,8 +75,8 @@ class Wishlister {
   }
 
   off() {
-    this.opts.$action.off();
-    this.opts.$flusher.off();
+    this.$action.off();
+    if (this.$flusher) this.$flusher.off();
     return true;
   }
 }
