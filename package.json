@@ -1,0 +1,30 @@
+{
+  "name": "wishlister",
+  "version": "0.0.1",
+  "description": "Front-end controller for wishlist, using bisquits to store as cookie.",
+  "main": "lib/Wishlister.js",
+  "scripts": {
+    "test": "jest",
+    "compile": "babel -d lib/ src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ludens-reklamebyra/wishlister.git"
+  },
+  "keywords": [
+    "wishlist"
+  ],
+  "author": "Stian Bakkane <stianba@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ludens-reklamebyra/wishlister/issues"
+  },
+  "homepage": "https://github.com/ludens-reklamebyra/wishlister#readme",
+  "dependencies": {
+    "bisquits": "0.0.5",
+    "jquery": "^2.1.4"
+  },
+  "devDependencies": {
+    "babel": "^5.8.23"
+  }
+}
